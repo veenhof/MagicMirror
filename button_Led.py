@@ -100,49 +100,41 @@ if __name__ == '__main__':
         while True:
 
 # check if switch is pressed and keep checking
-            while GPIO.input(switch1) == 1 and GPIO.input(switch2) == 1:
+            while GPIO.input(switch1) == 0 and GPIO.input(switch2) == 0:
                 print "waiting for switch press"
+                print "Mirror wordt uitgeschakeld"
                 print(GPIO.input(switch1))
                 print(GPIO.input(switch2))
+                GPIO.output(5, GPIO.HIGH) # High is uitschakelen
                 time.sleep(0.5)
 
             else:
-                # checks current relay state and changes it to the other.
-                if GPIO.input(switch1) == 0 and GPIO.input(switch2) == 1:
-                    print "Setting SWITCH 1  gpio high"
-                    #print(GPIO.input(switch1))
-                    state1 = 1
-                    time.sleep(1)
-                    state1 = 0
-                        #print(state1)
-                        #print(state2)
-		    rainbow(strip)
-		    print("3sec, Going for the Rainbow Shine!")
-                    sleep(3.0)
-                    if GPIO.input(button1) == 0:
-                        print("You want Rainbow, You've got it")
-			rainbow(strip)
+
+                    if GPIO.input(switch1) == 1: #and GPIO.input(switch2) == 0:
+                        print(GPIO.input(switch1))
+                        time.sleep(0.5)
+                        rainbow(strip)
+                        state1 = 1
+                        print(GPIO.input(switch1))
+                        print(GPIO.input(switch2))
+
+
+                    elif GPIO.input(switch2) == 1:
+                        state2 = 1
+                        print "setting PIR AAN"
+                        GPIO.output(5, GPIO.LOW) # LOW is aan!
+                        time.sleep(1.0)
+
                     else:
-                        print("Just Kidding")
-
-
-                elif GPIO.input(switch1) == 1 and GPIO.input(switch2) == 0:
-                #elif state2 == 0:
-                    print "Setting SWITCH 2  gpio high"
-                    state2 = 1
-                    GPIO.output(relay1, GPIO.HIGH)
-                    time.sleep(3)
-                    state2 = 0
-                        #print(state1)
-                        #print(state2)
-                    time.sleep(1)
-	        else:
                         print "setting gpio low"
                         state1 = 0
                         state2 = 0
-                        GPIO.output(relay1, GPIO.LOW)
-                        time.sleep(1)
+                        GPIO.output(5, GPIO.HIGH) # High is uitschakelen
+                        time.sleep(1.0)
+
+
 # check for switch released and keep checking
-	        while GPIO.input(switch1) == 0 or GPIO.input(switch2) == 0:
-        	        print "waiting for switch release"
-                	time.sleep(0.5)
+            while GPIO.input(switch1) == 1 or GPIO.input(switch2) == 0:
+                print "waiting for switch release"
+                time.sleep(0.5)
+
